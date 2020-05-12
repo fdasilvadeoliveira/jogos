@@ -3,8 +3,11 @@ import random
 import time
 
 
+# Jogo snake, marca a pontuacao e o recorde. Quando morre, faz reset dos pontos e move para o centro. Esc para sair
+# As variaveis simples encontram-se no final. Elas sao:
+# tela, caneta, cobrinha, corpo, inchar, caneta_pontos, caneta_recorde, comida, variavel_da_comida, sair_do_jogo
 # Funcoes que tenham a ver com desenho
-def desenhaborda():
+def desenhaborda():  # Nao so desenha a borda como tambem as palavras "pontos" e "recorde" em suas posicoes corretas
     caneta.goto(-300, -300)
     caneta.setheading(0)
     caneta.pensize(3)
@@ -24,21 +27,21 @@ def desenhaborda():
     caneta.write("Recorde: ", font=("Arial", 30, "normal"))
 
 
-def desenha_pontos():
+def desenha_pontos():  # toda vez que for acionada, apaga o numero de pontos e escreve o novo numero
     caneta_pontos.undo()
     caneta_pontos.write(len(rabo) - 1, font=("Arial", 30, "normal"))
 
 
-def desenha_recorde(rec):
+def desenha_recorde(rec):  # toda vez que for acionada, apaga o recorde e escreve o novo numero
     caneta_recorde.undo()
     caneta_recorde.write(rec, font=("Arial", 30, "normal"))
 
 
 # Funcao pra comida
-def checa_comida():
+def checa_comida():  # Acionada quando a cobra "encosta" na comida
     global variavel_da_comida
     if cobrinha.distance(comida) < 15:
-        comida.goto(random.randint(-290, 290), random.randint(-290, 290))
+        comida.goto(random.randint(-290, 290), random.randint(-290, 290))  # A comida eh movida pra uma pos. aleatoria
         rabo_cresce()
         desenha_pontos()
         variavel_da_comida = len(rabo)+1
@@ -50,7 +53,7 @@ def comida_passando():
     global variavel_da_comida
     if variavel_da_comida > 0:
         variavel_da_comida = variavel_da_comida - 1
-    if variavel_da_comida == 0:
+    elif variavel_da_comida == 0:
         inchar.hideturtle()
 
 
@@ -132,6 +135,12 @@ def checa_se_bateu():
             caneta_pontos.write(len(rabo) - 1, font=("Arial", 30, "normal"))
 
 
+def sair():
+    global sair_do_jogo
+    sair_do_jogo = True
+
+
+# O jogo em si
 def mainloop():
     desenhaborda()
     recorde = 0
@@ -150,8 +159,9 @@ def mainloop():
         if len(rabo)-1 > recorde:
             recorde = len(rabo)-1
             desenha_recorde(recorde)
-    # fim
-    # turtle.done()
+        if sair_do_jogo:
+            print("saindo...")
+            break
 
 
 # Tamanho e fundo da tela
@@ -170,6 +180,7 @@ tela.onkeypress(cobrinha_esquerda, key="a")
 tela.onkeypress(cobrinha_direita, key="d")
 tela.onkeypress(cobrinha_cima, key="w")
 tela.onkeypress(cobrinha_baixo, key="s")
+tela.onkeypress(sair, key="Escape")
 
 # Desenhos da tela
 caneta = turtle.Turtle()
@@ -221,6 +232,6 @@ comida.shapesize(0.7, 0.7)
 comida.goto(random.randint(-290, 290), random.randint(-290, 290))
 
 variavel_da_comida = 0
-
+sair_do_jogo = False
 # O jogo em si
 mainloop()
