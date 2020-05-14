@@ -114,26 +114,37 @@ def rabo_anda():
 
 
 def checa_se_bateu():
-    global rabo, velocidade
     if cobrinha.xcor() > 290 or cobrinha.xcor() < -290 or cobrinha.ycor() > 290 or cobrinha.ycor() < -290:
-        apaga_rabo()
-        cobrinha.goto(0, 0)
-        corpo.showturtle()
-        rabo = [[corpo.clone(), cobrinha.pos()]]
-        corpo.hideturtle()
-        velocidade = 0
-        caneta_pontos.undo()
-        caneta_pontos.write(len(rabo) - 1, font=("Arial", 30, "normal"))
+        reset()
     for item in rabo:
         if cobrinha.distance(item[0].pos()) < 15:
-            apaga_rabo()
-            cobrinha.goto(0, 0)
-            corpo.showturtle()
-            rabo = [[corpo.clone(), cobrinha.pos()]]
-            corpo.hideturtle()
-            velocidade = 0
-            caneta_pontos.undo()
-            caneta_pontos.write(len(rabo) - 1, font=("Arial", 30, "normal"))
+            reset()
+
+
+def le_arquivo_recorde():
+    try:
+        with open('arquivo_recorde.txt') as arquivo:
+            rec = arquivo.read()
+            return int(rec)
+    except FileNotFoundError:
+        return 0
+
+
+def grava_arquivo_recorde(rec):
+    with open('arquivo_recorde.txt', 'w') as arquivo:
+        arquivo.write(str(rec))
+
+
+def reset():
+    global rabo, velocidade
+    apaga_rabo()
+    cobrinha.goto(0, 0)
+    corpo.showturtle()
+    rabo = [[corpo.clone(), cobrinha.pos()]]
+    corpo.hideturtle()
+    velocidade = 0
+    caneta_pontos.undo()
+    caneta_pontos.write(len(rabo) - 1, font=("Arial", 30, "normal"))
 
 
 def sair():
@@ -144,7 +155,8 @@ def sair():
 # O jogo em si
 def mainloop():
     desenhaborda()
-    recorde = 0
+    recorde = le_arquivo_recorde()
+    desenha_recorde(recorde)
     global rabo, velocidade
     while True:
         tela.update()
@@ -160,6 +172,7 @@ def mainloop():
         if len(rabo)-1 > recorde:
             recorde = len(rabo)-1
             desenha_recorde(recorde)
+            grava_arquivo_recorde(recorde)
         if sair_do_jogo:
             print("saindo...")
             break
@@ -195,7 +208,7 @@ cobrinha = turtle.Turtle()
 cobrinha.penup()
 cobrinha.shape("square")
 cobrinha.color("grey")
-cobrinha.shapesize(0.7, 0.7)
+cobrinha.shapesize(1, 1)
 cobrinha.speed(0)
 velocidade = 0  # 18
 
@@ -204,7 +217,7 @@ corpo = turtle.Turtle()
 corpo.penup()
 corpo.shape("square")
 corpo.color("white")
-corpo.shapesize(0.7, 0.7)
+corpo.shapesize(0.8, 0.8)
 corpo.speed(0)
 rabo = [[corpo.clone(), cobrinha.pos()]]
 corpo.hideturtle()
