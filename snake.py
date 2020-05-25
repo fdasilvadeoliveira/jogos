@@ -3,6 +3,7 @@ import random
 import time
 
 
+# Esse jogo salva o recorde em um arquivo txt e carrega depois que rodam novamente
 # Jogo snake, marca a pontuacao e o recorde. Quando morre, faz reset dos pontos e move para o centro. Esc para sair
 # As variaveis simples encontram-se no final. Elas sao:
 # tela, caneta, cobrinha, corpo, inchar, caneta_pontos, caneta_recorde, comida, variavel_da_comida, sair_do_jogo
