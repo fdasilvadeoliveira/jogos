@@ -7,7 +7,7 @@ caneta.hideturtle()
 caneta.penup()
 caneta.speed(0)
 
-# tela
+# propriedades da tela
 tela = turtle.Screen()
 tela.setup(width=1000, height=700)
 
